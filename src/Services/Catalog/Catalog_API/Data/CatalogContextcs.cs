@@ -6,6 +6,8 @@ namespace Catalog_API.Data
 {
     public class CatalogContext : ICatalogContext
     {
+        public IMongoCollection<Product> Products { get; }        
+        
         public CatalogContext(IConfiguration configuration)
         {
             var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
@@ -15,7 +17,7 @@ namespace Catalog_API.Data
             CatalogContextSeed.SeedData(Products);
         }
 
-        public IMongoCollection<Product> Products { get; }
+      
     }
     
 }
