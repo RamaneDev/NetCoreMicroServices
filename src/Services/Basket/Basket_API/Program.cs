@@ -1,3 +1,8 @@
+using Basket_API.Repositories;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
 namespace Basket_API
 {
     public class Program
@@ -7,6 +12,13 @@ namespace Basket_API
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetSection("CacheSettings:ConnectionString").Value;
+            });
+
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
