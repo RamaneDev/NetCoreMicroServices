@@ -1,4 +1,6 @@
-﻿namespace Basket_API.Entities
+﻿using System.Collections.Generic;
+
+namespace Basket_API.Entities
 {
     public class ShoppingCart
     {
