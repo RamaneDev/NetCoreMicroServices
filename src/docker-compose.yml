@@ -1,14 +1,20 @@
 version: '3.4'
 
-services:
+services: 
+  
+  catalog_api:
+    image: ramane/catalog_api
   catalogdb:
     image: mongo
-  basketdb:
-    image: redis:alpine
-  catalog_api:
-    image: ramane/catalog_api    
+  
   basket_api:
     image: ramane/basket_api
+  basketdb:
+    image: redis:alpine
+
+  portainer:
+    image: portainer/portainer-ce
 
 volumes:
   mongo_data:
+  portainer_data:  
