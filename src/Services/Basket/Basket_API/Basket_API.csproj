@@ -3,10 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerfileContext>..\..\..</DockerfileContext>
-    <DockerComposeProjectPath>..\..\..\docker-compose.dcproj</DockerComposeProjectPath>   
+    <DockerfileContext>..\..\..</DockerfileContext>   
   </PropertyGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.9" />
@@ -16,9 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="..\..\Discount\Dicount_GRPC\Protos\discount.proto" GrpcServices="Client">
-      <Link>Protos\discount.proto</Link>
-    </Protobuf>
+    <Protobuf Include="Protos\discount.proto" GrpcServices="Client" />
   </ItemGroup>
 
 </Project>
