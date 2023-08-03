@@ -24,8 +24,12 @@ services:
     image: portainer/portainer-ce
 
 
+  dicount_grpc:
+    image: ramane/discount_grpc   
+
 volumes:
   mongo_data:
   portainer_data:
   postgres_data:
   pgadmin_data:  
+
