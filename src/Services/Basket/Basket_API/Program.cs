@@ -1,7 +1,10 @@
+using Basket_API.GRPC_Services;
 using Basket_API.Repositories;
+using Dicount_GRPC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Basket_API
 {
@@ -17,6 +20,11 @@ namespace Basket_API
             {
                 options.Configuration = builder.Configuration.GetSection("CacheSettings:ConnectionString").Value;
             });
+
+            // GRPC
+            builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
+               (o => o.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]));
+            builder.Services.AddScoped<DiscountGrpcService>();
 
             builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
