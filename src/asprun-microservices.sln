@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Discount", "Discount", "{A7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discount_API", "Services\Discount\Discount_API\Discount_API.csproj", "{30DF054D-6486-4544-AA3E-2AD57143F0BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dicount_GRPC", "Services\Discount\Dicount_GRPC\Dicount_GRPC.csproj", "{D701139D-50A9-4112-AF63-4708ED30DFD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dicount_GRPC", "Services\Discount\Dicount_GRPC\Dicount_GRPC.csproj", "{D701139D-50A9-4112-AF63-4708ED30DFD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
