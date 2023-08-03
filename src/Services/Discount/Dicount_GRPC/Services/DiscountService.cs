@@ -26,7 +26,12 @@ namespace Dicount_GRPC.Services
             var coupon = await _repository.GetDiscount(request.ProductName);
             if (coupon == null)
             {
-                throw new RpcException(new Status(StatusCode.NotFound, $"Discount with ProductName={request.ProductName} is not found."));
+                _logger.LogInformation($"Discount with ProductName={request.ProductName} is not found.");
+                var emptyCoupon = new Coupon() { Amount = 0, Description="", Id=0, ProductName="" };
+                var emptyCouponModel = _mapper.Map<CouponModel>(emptyCoupon);
+                return emptyCouponModel;
+                
+                //throw new RpcException(new Status(StatusCode.NotFound, $"Discount with ProductName={request.ProductName} is not found."));
             }
             _logger.LogInformation("Discount is retrieved for ProductName : {productName}, Amount : {amount}", coupon.ProductName, coupon.Amount);
 
