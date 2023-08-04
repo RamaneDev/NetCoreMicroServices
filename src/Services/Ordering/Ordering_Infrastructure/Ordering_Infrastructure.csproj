@@ -8,4 +8,11 @@
     <ProjectReference Include="..\Ordering_Application\Ordering_Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mail\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Persistence\" />
+  </ItemGroup>
+
 </Project>
