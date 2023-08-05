@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ValidationException = Ordering_Application.Exceptions.ValidationException;
 
 namespace Ordering_Application.Behaviours
 {
