@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Ordering_API.Extentions;
 using Ordering_Application;
 using Ordering_Infrastructure;
+using Ordering_Infrastructure.Persistence;
+using System;
 
 namespace Ordering_API
 {
@@ -22,6 +27,12 @@ namespace Ordering_API
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            app.MigrateDatabase<OrderContext>((c, s) => { 
+                
+                var logger = s.GetService<ILogger<OrderContextSeed>>();
+                OrderContextSeed.SeedAsync(c, logger).Wait();
+            });
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
