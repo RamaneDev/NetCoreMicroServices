@@ -30,9 +30,13 @@ services:
   dicount_grpc:
     image: ramane/discount_grpc   
 
+  ordering_api:
+    image: ramane/ordering_api
+
 volumes:
   mongo_data:
   portainer_data:
   postgres_data:
   pgadmin_data:  
+
 

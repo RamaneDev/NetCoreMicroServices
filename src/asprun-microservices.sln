@@ -22,14 +22,17 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dicount_GRPC", "Services\Discount\Dicount_GRPC\Dicount_GRPC.csproj", "{D701139D-50A9-4112-AF63-4708ED30DFD0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ordering", "Ordering", "{3232E40B-9D4A-4A2A-859A-041DC0244DB8}"
+	ProjectSection(SolutionItems) = preProject
+		Services\Ordering\Dockerfile = Services\Ordering\Dockerfile
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering_API", "Services\Ordering\Ordering_API\Ordering_API.csproj", "{793F8B9E-5638-4962-857B-A6C3DA49BED0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering_API", "Services\Ordering\Ordering_API\Ordering_API.csproj", "{793F8B9E-5638-4962-857B-A6C3DA49BED0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering_Application", "Services\Ordering\Ordering_Application\Ordering_Application.csproj", "{E909389E-8CCC-4192-B52F-83B2680E403A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering_Application", "Services\Ordering\Ordering_Application\Ordering_Application.csproj", "{E909389E-8CCC-4192-B52F-83B2680E403A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering_Domain", "Services\Ordering\Ordering_Domain\Ordering_Domain.csproj", "{B9222816-2BB1-494A-A0BB-147CE6D80CE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering_Domain", "Services\Ordering\Ordering_Domain\Ordering_Domain.csproj", "{B9222816-2BB1-494A-A0BB-147CE6D80CE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordering_Infrastructure", "Services\Ordering\Ordering_Infrastructure\Ordering_Infrastructure.csproj", "{20248B51-6E47-4A18-AB71-710ED801E356}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering_Infrastructure", "Services\Ordering\Ordering_Infrastructure\Ordering_Infrastructure.csproj", "{20248B51-6E47-4A18-AB71-710ED801E356}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
