@@ -19,7 +19,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\EventBus_Message\EventBus_Message.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\EventBus_Message\EventBus_Message.csproj" />
   </ItemGroup>
 
   <ItemGroup>
