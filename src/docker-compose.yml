@@ -36,6 +36,9 @@ services:
   ordering_api:
     image: ramane/ordering_api
 
+  ocelot_gw:
+    image: ramane/ocelot_gw
+
 volumes:
   mongo_data:
   portainer_data:
