@@ -39,10 +39,14 @@ services:
   ocelot_gw:
     image: ramane/ocelot_gw
 
+  shopping_aggregator:
+    image: ramane/shopping_agt
+
 volumes:
   mongo_data:
   portainer_data:
   postgres_data:
   pgadmin_data:  
+
 
 
