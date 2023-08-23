@@ -19,7 +19,31 @@ namespace Basket_API.Test.Controllers
 {
     public class TestBasketController
     {
-        
+        [Fact]
+        public async Task GetBasket_OnCall_InvokeBasketRepositoryExactlyOnce()   // sucess
+        {
+            //Arrange
+            var mockBasketRepo = new Mock<IBasketRepository>();
+            string basketUsername = "Found";
+            mockBasketRepo.Setup(service => service.GetBasket(basketUsername)).ReturnsAsync(new ShoppingCart(basketUsername));
+
+            var sut = new BasketController(mockBasketRepo.Object,
+                null,
+                null,
+                null);
+
+            //Act
+            var actionResult = await sut.GetBasket(basketUsername);
+
+            var IactionRsult = ((IConvertToActionResult)actionResult).Convert();
+
+            var objectResult = (ObjectResult)IactionRsult;
+
+            //Assert
+            mockBasketRepo.Verify(service => service.GetBasket(basketUsername), Times.Once);
+
+
+        }
 
         [Fact]
         public async Task GetBasket_OnNoBasketFound_Returns_NotFound_404()   // sucess
