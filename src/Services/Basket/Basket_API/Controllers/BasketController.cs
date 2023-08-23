@@ -39,12 +39,13 @@ namespace Basket_API.Controllers
 
         [HttpGet("{userName}", Name = "GetBasket")]
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         public async Task<ActionResult<ShoppingCart>> GetBasket(string userName)
         {
-            var basket = await _repository.GetBasket(userName);
+            var basket = await _repository.GetBasket(userName);          
             if (basket == null)
                 return NotFound(new ShoppingCart(""));
-            return Ok(basket ?? new ShoppingCart(""));
+            return Ok(basket);
         }
 
         [HttpPost]

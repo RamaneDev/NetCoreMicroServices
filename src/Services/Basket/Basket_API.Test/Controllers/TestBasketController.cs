@@ -19,9 +19,13 @@ namespace Basket_API.Test.Controllers
 {
     public class TestBasketController
     {
+        
+
         [Fact]
-        public async Task Get_OnNoBasketFound_Reurns404()     // success
+        public async Task GetBasket_OnNoBasketFound_Returns_NotFound_404()   // sucess
         {
+
+            //Arrange
             var mockBasketRepo = new Mock<IBasketRepository>();      
             string basketUsername = "notFound";
             var emptyshoppingCart = new ShoppingCart()
@@ -36,18 +40,51 @@ namespace Basket_API.Test.Controllers
                 null,
                 null,
                 null);
-
+            
+            //Act
             var actionResult = await sut.GetBasket(basketUsername);
-
             var IactionRsult = ((IConvertToActionResult)actionResult).Convert();
-
-            IactionRsult.Should().BeOfType<NotFoundObjectResult>();
-
             var objectResult = (ObjectResult)IactionRsult;
+
+            //Assert
+            IactionRsult.Should().BeOfType<NotFoundObjectResult>();       
+            objectResult.StatusCode.Should().Be(404);
             objectResult.Value.Should().BeOfType<ShoppingCart>();
             objectResult.Value.Should().BeEquivalentTo(emptyshoppingCart);
-            objectResult.StatusCode.Should().Be(404);
+            
             
         }
+
+        [Fact]
+        public async Task GetBasket_OnBasketFound_Returns_Sucess_200()   // sucess
+        {
+            //Arrange
+            var mockBasketRepo = new Mock<IBasketRepository>();
+            string basketUsername = "Found";
+            mockBasketRepo.Setup(service => service.GetBasket(basketUsername)).ReturnsAsync(new ShoppingCart(basketUsername));
+
+            //Act
+            var sut = new BasketController(mockBasketRepo.Object,
+                null,
+                null,
+                null);
+
+            var actionResult = await sut.GetBasket(basketUsername);
+            var IactionRsult = ((IConvertToActionResult)actionResult).Convert();
+            var objectResult = (ObjectResult)IactionRsult;
+
+            //Assert
+            IactionRsult.Should().BeOfType<OkObjectResult>();            
+            objectResult.StatusCode.Should().Be(200);
+            objectResult.Value.Should().BeOfType<ShoppingCart>();
+            objectResult.Value.Should().NotBeNull()
+                                       .And.BeOfType<ShoppingCart>()
+                                       .Which.UserName.Should().Be("Found");
+
+
+        }
+
+
+
     }
 }
