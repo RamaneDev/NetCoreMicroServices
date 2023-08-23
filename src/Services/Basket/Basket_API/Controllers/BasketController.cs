@@ -21,6 +21,11 @@ namespace Basket_API.Controllers
         private readonly IMapper _mapper;
         private readonly IPublishEndpoint _publishEndpoint;
 
+        public BasketController(IBasketRepository repository)
+        {
+            _repository = repository;
+        }
+
         public BasketController(IBasketRepository repository, 
                                 DiscountGrpcService discountGrpcService, 
                                 IMapper mapper,
@@ -37,7 +42,9 @@ namespace Basket_API.Controllers
         public async Task<ActionResult<ShoppingCart>> GetBasket(string userName)
         {
             var basket = await _repository.GetBasket(userName);
-            return Ok(basket ?? new ShoppingCart(userName));
+            if (basket == null)
+                return NotFound(new ShoppingCart(""));
+            return Ok(basket ?? new ShoppingCart(""));
         }
 
         [HttpPost]
