@@ -20,12 +20,7 @@ namespace Basket_API.Controllers
         private readonly DiscountGrpcService _discountGrpcService;
         private readonly IMapper _mapper;
         private readonly IPublishEndpoint _publishEndpoint;
-
-        public BasketController(IBasketRepository repository)
-        {
-            _repository = repository;
-        }
-
+        
         public BasketController(IBasketRepository repository, 
                                 DiscountGrpcService discountGrpcService, 
                                 IMapper mapper,
@@ -52,6 +47,7 @@ namespace Basket_API.Controllers
         [ProducesResponseType(typeof(ShoppingCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<ShoppingCart>> UpdateBasket([FromBody] ShoppingCart basket)
         {
+
             foreach (var item in basket.Items)
             {
                 var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
