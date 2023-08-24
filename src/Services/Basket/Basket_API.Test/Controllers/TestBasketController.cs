@@ -4,6 +4,7 @@ using Basket_API.Entities;
 using Basket_API.GRPC_Services;
 using Basket_API.Repositories;
 using Dicount_GRPC;
+using EventBus_Message.Events;
 using FluentAssertions;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -203,8 +205,116 @@ namespace Basket_API.Test.Controllers
 
         }
 
+        [Fact]
+        public async Task UpdateBasket_OnCall_ReturnExpectedBasketAfterDiscount()   // sucess
+        {
+            //Arrange
+            var mockBasketRepo = new Mock<IBasketRepository>();
+            var mokDiscountGrpc = new Mock<DiscountGrpcService>();
+            var basketToUpdate = new ShoppingCart()
+            {
+                UserName = "username",
+                Items = new List<ShoppingCartItem>()
+         {
+             new ShoppingCartItem() {ProductName="p1", Color="red", Price=15, ProductId="p1", Quantity=3},
+             new ShoppingCartItem() {ProductName="p2", Color="green", Price=15, ProductId="p2", Quantity=3},
+             new ShoppingCartItem() {ProductName="p3", Color="black", Price=15, ProductId="p3", Quantity=3}
+         }
+            };
 
-       
+            var updatedBasket = new ShoppingCart()
+            {
+                UserName = "username",
+                Items = new List<ShoppingCartItem>()
+         {
+             new ShoppingCartItem() {ProductName="p1", Color="red", Price=5, ProductId="p1", Quantity=3},
+             new ShoppingCartItem() {ProductName="p2", Color="green", Price=5, ProductId="p2", Quantity=3},
+             new ShoppingCartItem() {ProductName="p3", Color="black", Price=5, ProductId="p3", Quantity=3}
+         }
+            };
+
+            mockBasketRepo.Setup(service => service.UpdateBasket(It.IsAny<ShoppingCart>())).ReturnsAsync(basketToUpdate);
+            mokDiscountGrpc.Setup(service => service.GetDiscount(It.IsAny<string>())).ReturnsAsync(new CouponModel() { Amount = 10 });
+
+
+            //Act
+            var sut = new BasketController(mockBasketRepo.Object,
+                mokDiscountGrpc.Object,
+                null,
+                null);
+
+            var actionResult = await sut.UpdateBasket(basketToUpdate);
+            var IactionRsult = ((IConvertToActionResult)actionResult).Convert();
+            var objectResult = (ObjectResult)IactionRsult;
+
+            //Assert
+            IactionRsult.Should().BeOfType<OkObjectResult>();
+            objectResult.StatusCode.Should().Be(200);
+            objectResult.Value.Should().BeOfType<ShoppingCart>();
+            objectResult.Value.Should().NotBeNull().And.BeEquivalentTo(updatedBasket);
+
+
+        }
+
+
+        [Fact]
+        public async Task Checkout_OnCall_EnsureThatTheEventIsPublishedInRabbitMq()   // sucess
+        {
+            //Arrange
+            var mockBasketRepo = new Mock<IBasketRepository>();
+            var mokDiscountGrpc = new Mock<DiscountGrpcService>();
+            var mockIpublish = new Mock<IPublishEndpoint>();
+            var mockMapper = new Mock<IMapper>();
+            
+            var basketToUpdate = new ShoppingCart()
+            {
+                UserName = "username",
+                Items = new List<ShoppingCartItem>()
+                     {
+                         new ShoppingCartItem() {ProductName="p1", Color="red", Price=15, ProductId="p1", Quantity=3},
+                         new ShoppingCartItem() {ProductName="p2", Color="green", Price=15, ProductId="p2", Quantity=3},
+                         new ShoppingCartItem() {ProductName="p3", Color="black", Price=15, ProductId="p3", Quantity=3}
+                     }
+            };
+
+            var updatedBasket = new ShoppingCart()
+            {
+                UserName = "username",
+                Items = new List<ShoppingCartItem>()
+                     {
+                         new ShoppingCartItem() {ProductName="p1", Color="red", Price=5, ProductId="p1", Quantity=3},
+                         new ShoppingCartItem() {ProductName="p2", Color="green", Price=5, ProductId="p2", Quantity=3},
+                         new ShoppingCartItem() {ProductName="p3", Color="black", Price=5, ProductId="p3", Quantity=3}
+                     }
+            };
+
+
+            var basketCheckout = new BasketCheckout() { UserName="basket" };            
+            var basketCheckoutEvent = new BasketCheckoutEvent();
+            
+            mockBasketRepo.Setup(service => service.GetBasket(basketCheckout.UserName)).ReturnsAsync(new ShoppingCart("basket"));
+            mockBasketRepo.Setup(service => service.DeleteBasket(It.IsAny<string>())).Returns(Task.CompletedTask);
+            mockIpublish.Setup(service => service.Publish(It.IsAny<BasketCheckoutEvent>(), It.IsAny<CancellationToken>()))
+                        .Returns(Task.CompletedTask);
+            mockMapper.Setup(service => service.Map<BasketCheckoutEvent>(It.IsAny<BasketCheckout>())).Returns(basketCheckoutEvent);
+
+
+            //Act
+            var sut = new BasketController(mockBasketRepo.Object,
+                null,
+                mockMapper.Object,
+                mockIpublish.Object);
+
+            var actionResult = await sut.Checkout(basketCheckout);
+
+            mockBasketRepo.Verify(service => service.GetBasket(basketCheckout.UserName), Times.Once);           
+            mockIpublish.Verify(service => service.Publish(basketCheckoutEvent, It.IsAny<CancellationToken>()), Times.Once);
+            mockBasketRepo.Verify(service => service.DeleteBasket(basketCheckout.UserName), Times.Once);
+
+        }
+
+
+
 
 
 
