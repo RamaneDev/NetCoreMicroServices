@@ -149,13 +149,62 @@ namespace Basket_API.Test.Controllers
 
             var result = await sut.UpdateBasket(basketToUpdate);
 
-
-
             //Assert
             mokDiscountGrpc.Verify(service => service.GetDiscount(It.IsAny<string>()), Times.Exactly(basketToUpdate.Items.Count));
 
 
         }
+
+
+
+        [Fact]
+        public async Task UpdateBasket_OnCall_InvokeBasketRepositoryServiceExactlyOnce()   // sucess
+        {
+            //Arrange
+            var mockBasketRepo = new Mock<IBasketRepository>();
+            var mokDiscountGrpc = new Mock<DiscountGrpcService>();
+            var basketToUpdate = new ShoppingCart()
+            {
+                UserName = "username",
+                Items = new List<ShoppingCartItem>()
+                {
+                    new ShoppingCartItem() {ProductName="p1", Color="red", Price=15, ProductId="p1", Quantity=3},
+                    new ShoppingCartItem() {ProductName="p2", Color="green", Price=15, ProductId="p2", Quantity=3},
+                    new ShoppingCartItem() {ProductName="p3", Color="black", Price=15, ProductId="p3", Quantity=3}
+                }
+            };
+
+            var updatedBasket = new ShoppingCart()
+            {
+                UserName = "username",
+                Items = new List<ShoppingCartItem>()
+                {
+                    new ShoppingCartItem() {ProductName="p1", Color="red", Price=5, ProductId="p1", Quantity=3},
+                    new ShoppingCartItem() {ProductName="p2", Color="green", Price=5, ProductId="p2", Quantity=3},
+                    new ShoppingCartItem() {ProductName="p3", Color="black", Price=5, ProductId="p3", Quantity=3}
+                }
+            };
+
+            mockBasketRepo.Setup(service => service.UpdateBasket(basketToUpdate)).ReturnsAsync(updatedBasket);
+            mokDiscountGrpc.Setup(service => service.GetDiscount(It.IsAny<string>())).ReturnsAsync(new CouponModel() { });
+
+
+            //Act
+            var sut = new BasketController(mockBasketRepo.Object,
+                mokDiscountGrpc.Object,
+                null,
+                null);
+
+            var result = await sut.UpdateBasket(basketToUpdate);
+
+            //Assert
+            mockBasketRepo.Verify(service => service.UpdateBasket(basketToUpdate), Times.Once);
+
+
+        }
+
+
+       
 
 
 
