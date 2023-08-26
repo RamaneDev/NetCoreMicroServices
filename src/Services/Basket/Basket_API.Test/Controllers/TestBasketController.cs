@@ -126,18 +126,7 @@ namespace Basket_API.Test.Controllers
                     new ShoppingCartItem() {ProductName="p2", Color="green", Price=15, ProductId="p2", Quantity=3},
                     new ShoppingCartItem() {ProductName="p3", Color="black", Price=15, ProductId="p3", Quantity=3}
                 }
-            };
-
-            var updatedBasket = new ShoppingCart()
-            {
-                UserName = "username",
-                Items = new List<ShoppingCartItem>()
-                {
-                    new ShoppingCartItem() {ProductName="p1", Color="red", Price=5, ProductId="p1", Quantity=3},
-                    new ShoppingCartItem() {ProductName="p2", Color="green", Price=5, ProductId="p2", Quantity=3},
-                    new ShoppingCartItem() {ProductName="p3", Color="black", Price=5, ProductId="p3", Quantity=3}
-                }
-            };
+            };         
          
             mockBasketRepo.Setup(service => service.UpdateBasket(basketToUpdate)).ReturnsAsync(basketToUpdate);
             mokDiscountGrpc.Setup(service => service.GetDiscount(It.IsAny<string>())).ReturnsAsync(new CouponModel() {});
