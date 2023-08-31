@@ -50,6 +50,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetRunBasics", "WebApps\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Basket_API.Test", "Services\Basket\Basket_API.Test\Basket_API.Test.csproj", "{29AF1FA7-797A-4DEC-A316-F561CD1F3522}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration.Tests", "Integration.Tests", "{91138AF1-E838-4100-A26E-3E6E7AA0C7B4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Integration.Tests.CatalogApi", "Integration.Tests\Integration.Tests.CatalogApi.csproj", "{6E67A63F-4F89-4BD7-A8D5-A9D3CB89AAA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -112,6 +116,10 @@ Global
 		{29AF1FA7-797A-4DEC-A316-F561CD1F3522}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29AF1FA7-797A-4DEC-A316-F561CD1F3522}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29AF1FA7-797A-4DEC-A316-F561CD1F3522}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E67A63F-4F89-4BD7-A8D5-A9D3CB89AAA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E67A63F-4F89-4BD7-A8D5-A9D3CB89AAA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E67A63F-4F89-4BD7-A8D5-A9D3CB89AAA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E67A63F-4F89-4BD7-A8D5-A9D3CB89AAA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +142,7 @@ Global
 		{2F99CD75-EBAF-4CAB-84FA-65131DD59B0B} = {158CC8DE-F892-4069-89A9-5E2A3512F0A5}
 		{1E143B1E-6878-47C3-AC53-E42FF84C8BC5} = {0EDA1694-4221-4E06-B7AB-9ED988F3FA22}
 		{29AF1FA7-797A-4DEC-A316-F561CD1F3522} = {CC207A7E-E4B6-4D35-A927-9D48954B4476}
+		{6E67A63F-4F89-4BD7-A8D5-A9D3CB89AAA5} = {91138AF1-E838-4100-A26E-3E6E7AA0C7B4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BD8A901F-3277-4CEC-838E-2D06C1F1055B}
