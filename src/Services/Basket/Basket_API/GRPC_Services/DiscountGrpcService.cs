@@ -4,7 +4,7 @@ using Dicount_GRPC;
 
 namespace Basket_API.GRPC_Services
 {
-    public class DiscountGrpcService
+    public class DiscountGrpcService : IDiscountGrpcService
     {
         private readonly DiscountProtoService.DiscountProtoServiceClient _discountProtoService;
 
