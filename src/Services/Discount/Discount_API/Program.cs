@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -31,6 +32,7 @@ namespace Discount_API
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
+                var logger = services.GetService<ILogger<DiscountContext>>();
 
                 try
                 {
@@ -50,7 +52,9 @@ namespace Discount_API
 
                    
                 }
-                catch (Exception ex){}
+                catch (Exception ex){
+                    logger.LogError(ex.Message);
+;                }
             }
 
             // Configure the HTTP request pipeline.
