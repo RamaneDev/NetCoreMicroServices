@@ -30,7 +30,7 @@ services:
   orderdb:
     container_name: orderdb
     environment:      
-      - MSSQL_SA_PASSWORD=Pa$$w0rd
+      - MSSQL_SA_PASSWORD=Pa55w0rd
       - ACCEPT_EULA=Y
     restart: always
     ports:
@@ -116,7 +116,7 @@ services:
     container_name: ordering_api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=admin1234;TrustServerCertificate=True"
+      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=Pa55w0rd;TrustServerCertificate=True"
       - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672" 
     depends_on:
         - orderdb

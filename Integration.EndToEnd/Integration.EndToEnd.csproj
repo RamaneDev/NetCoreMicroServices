@@ -2,9 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
@@ -23,6 +20,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\ApiGateways\OcelotApiGw\OcelotApiGw.csproj" />
+    <ProjectReference Include="..\src\ApiGateways\Shopping_Aggregator\Shopping_Aggregator.csproj" />
+    <ProjectReference Include="..\src\BuildingBlocks\EventBus_Message\EventBus_Message.csproj" />
+    <ProjectReference Include="..\src\Services\Basket\Basket_API\Basket_API.csproj" />
+    <ProjectReference Include="..\src\Services\Catalog\Catalog_API\Catalog_API.csproj" />
+    <ProjectReference Include="..\src\Services\Discount\Dicount_GRPC\Dicount_GRPC.csproj" />
+    <ProjectReference Include="..\src\Services\Discount\Discount_API\Discount_API.csproj" />
+    <ProjectReference Include="..\src\Services\Ordering\Ordering_API\Ordering_API.csproj" />
   </ItemGroup>
 
 </Project>
