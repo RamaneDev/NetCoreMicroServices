@@ -160,7 +160,12 @@ namespace Integration.EndToEnd.Fixtures
         public async ValueTask<IEnumerable<Product>> GetCatalogAsync() =>
            await this._apiFactoryClient.GetContentAsync<IEnumerable<Product>>(catalogUrl);
 
-       
+        public async ValueTask<ShoppingCart> PostBasketAsync(ShoppingCart basket) =>
+          await this._apiFactoryClient.PostContentAsync<ShoppingCart>(basketUrl, basket);
+
+        public async ValueTask<ShoppingCart> GetBasketAsync(string username) =>
+          await this._apiFactoryClient.GetContentAsync<ShoppingCart>($"{basketUrl}/{username}");
+
 
         public async Task InitializeAsync()
         {
