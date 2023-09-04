@@ -9,17 +9,26 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using OcelotApiGw;
 using Docker.DotNet.Models;
+using System.Net.Http;
+using RESTFulSense.Clients;
+using Catalog_API.Entities;
+using Microsoft.AspNetCore.Hosting;
+using static Org.BouncyCastle.Math.EC.ECCurve;
+using Microsoft.Extensions.Configuration;
+using Basket_API.Entities;
 
 namespace Integration.EndToEnd.Fixtures
 {
     public class WebApplicationFactoryFixture : IAsyncLifetime
     {
         private readonly WebApplicationFactory<Program> _ocelot_webApplicationFactory;
-        //private readonly HttpClient _httpClient;
-        //private readonly RESTFulApiFactoryClient _apiFactoryClient;
+        private readonly HttpClient _httpClient;
+        private readonly RESTFulApiFactoryClient _apiFactoryClient;
+        private const string catalogUrl = "/Catalog";
+        private const string basketUrl = "/Basket";
 
         // apis containers
-        private readonly IContainer _catalogContainer;
+        private readonly IContainer _catalogapiContainer;
         private readonly IContainer _basket_apiContainer;
         private readonly IContainer _discount_apiContainer;
         private readonly IContainer _discount_GrpcContainer;
@@ -33,14 +42,25 @@ namespace Integration.EndToEnd.Fixtures
         private readonly IContainer _SQLserverContainer;
         private readonly IContainer _rabbitmqContainer;
 
+
+        static void CreateClient()
+        {
+
+        }
+
         public WebApplicationFactoryFixture()
         {
-            _ocelot_webApplicationFactory = new WebApplicationFactory<Program>();
-            
-            var micro_services_net = new NetworkBuilder().WithName("customNetwork").Build();
+            _ocelot_webApplicationFactory = new WebApplicationFactory<Program>();       
+            _httpClient = _ocelot_webApplicationFactory.CreateClient();
+            _apiFactoryClient = new RESTFulApiFactoryClient(_httpClient);
 
+            // docker custom network to connect containers
+            var micro_services_net = new NetworkBuilder().WithName("micro_services_net").Build();           
+            
             // apis containers
-            _catalogContainer = new ContainerBuilder()
+            #region build api container  
+
+            _catalogapiContainer = new ContainerBuilder()
            .WithImage("ramane/catalog_api")
            .WithNetwork(micro_services_net)
            .WithName("catalog_api")
@@ -56,7 +76,7 @@ namespace Integration.EndToEnd.Fixtures
            .WithPortBinding(8001, 80)
            .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
            .WithEnvironment("CacheSettings:ConnectionString", "basketdb:6379")
-           .WithEnvironment("GrpcSettings:DiscountUrl", "http://dicount_grpc")
+           .WithEnvironment("GrpcSettings:DiscountUrl", "http://discount_grpc")
            .WithEnvironment("EventBusSettings:HostAddress", "amqp://guest:guest@rabbitmq:5672")
            .Build();
 
@@ -88,17 +108,15 @@ namespace Integration.EndToEnd.Fixtures
            .WithEnvironment("EventBusSettings:HostAddress", "amqp://guest:guest@rabbitmq:5672")
            .Build();
 
-
-
-
+            #endregion
 
             // database containers
+            #region build databases containers
+           
             _mongoContainer = new ContainerBuilder()
            .WithImage("mongo")
            .WithNetwork(micro_services_net)
            .WithName("catalogdb")
-           //.WithNetwork("bridge")
-           //.WithNetworkAliases("catalogdb")
            .WithExposedPort(27017)
            .WithPortBinding(27017, 27017)
            .Build();
@@ -109,7 +127,6 @@ namespace Integration.EndToEnd.Fixtures
            .WithName("basketdb")
            .WithPortBinding(6379, 6379)
            .Build();
-
 
             _postgreSQLContainer = new ContainerBuilder()
            .WithImage("postgres")
@@ -130,14 +147,20 @@ namespace Integration.EndToEnd.Fixtures
            .WithEnvironment("ACCEPT_EULA", "Y")
            .Build();
 
-            _rabbitmqContainer = new ContainerBuilder()
-            .WithImage("rabbitmq:3-management-alpine")
-            .WithName("rabbitmq")
-            .WithNetwork(micro_services_net)
-            .WithPortBinding(5672, 5672)
-            .WithPortBinding(15672, 15672)            
-            .Build();
+           _rabbitmqContainer = new ContainerBuilder()
+           .WithImage("rabbitmq:3-management-alpine")
+           .WithName("rabbitmq")
+           .WithNetwork(micro_services_net)
+           .WithPortBinding(5672, 5672)
+           .WithPortBinding(15672, 15672)            
+           .Build();
+            #endregion 
         }
+
+        public async ValueTask<IEnumerable<Product>> GetCatalogAsync() =>
+           await this._apiFactoryClient.GetContentAsync<IEnumerable<Product>>(catalogUrl);
+
+       
 
         public async Task InitializeAsync()
         {
@@ -149,7 +172,17 @@ namespace Integration.EndToEnd.Fixtures
 
             await Task.WhenAll(mongoTask, redisTask, postgreSQLTask, SQLserverTask, rabbitmqTask);
 
-            await _catalogContainer.StartAsync();
+            Task.Delay(5000).Wait();
+            
+            var catalogapiTask   = _catalogapiContainer.StartAsync();
+            var basketapiTask    = _basket_apiContainer.StartAsync() ;
+            var discountapiTask  = _discount_apiContainer.StartAsync();
+            var discountgrpcTask = _discount_GrpcContainer.StartAsync();
+            var orderingTask     = _ordering_apiContainer.StartAsync();
+
+            await Task.WhenAll(catalogapiTask, basketapiTask, discountapiTask, discountgrpcTask, orderingTask);
+
+     
         }
 
 
@@ -165,7 +198,13 @@ namespace Integration.EndToEnd.Fixtures
 
             await Task.WhenAll(mongoTask, redisTask, postgreSQLTask, SQLserverTask, rabbitmqTask);
 
-            await _catalogContainer.StopAsync();
+            var catalogapiTask = _catalogapiContainer.StopAsync();
+            var basketapiTask = _basket_apiContainer.StopAsync();
+            var discountapiTask = _discount_apiContainer.StopAsync();
+            var discountgrpcTask = _discount_GrpcContainer.StopAsync();
+            var orderingTask = _ordering_apiContainer.StopAsync();
+
+            await Task.WhenAll(catalogapiTask, basketapiTask, discountapiTask, discountgrpcTask, orderingTask);
         }
 
       

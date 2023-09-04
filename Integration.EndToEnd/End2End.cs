@@ -1,4 +1,9 @@
+using Basket_API.Entities;
+using Catalog_API.Data;
+using FluentAssertions;
 using Integration.EndToEnd.Fixtures;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Integration.EndToEnd
@@ -13,8 +18,14 @@ namespace Integration.EndToEnd
         }
 
         [Fact]
-        public void End2EndTest()
+        public async void End2EndTest()
         {
+            var expectedProductList = CatalogContextSeed.GetPreconfiguredProducts();
+            Task.Delay(3000).Wait();
+            var listProduct = await _factory.GetCatalogAsync();
+            listProduct.Should().BeEquivalentTo(expectedProductList);
+
+            
 
         }
     }

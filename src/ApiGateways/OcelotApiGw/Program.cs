@@ -17,7 +17,7 @@ namespace OcelotApiGw
 
             builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
             {
-                config.AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true);
+                config.AddJsonFile($"ocelot.Local.json", true, true);
             })
             .ConfigureLogging((hostingContext, loggingbuilder) =>
             {

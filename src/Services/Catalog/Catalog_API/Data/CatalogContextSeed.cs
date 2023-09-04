@@ -15,7 +15,7 @@ namespace Catalog_API.Data
             }
         }
 
-        private static IEnumerable<Product> GetPreconfiguredProducts()
+        public static IEnumerable<Product> GetPreconfiguredProducts()
         {
             return new List<Product>()
             {
