@@ -1,20 +1,13 @@
 ﻿using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
 using OcelotApiGw;
-using Docker.DotNet.Models;
 using System.Net.Http;
 using RESTFulSense.Clients;
 using Catalog_API.Entities;
-using Microsoft.AspNetCore.Hosting;
-using static Org.BouncyCastle.Math.EC.ECCurve;
-using Microsoft.Extensions.Configuration;
 using Basket_API.Entities;
 using Ordering_Application.Features.Orders.Queries.GetOrdersList;
 
@@ -43,12 +36,6 @@ namespace Integration.EndToEnd.Fixtures
         private readonly IContainer _postgreSQLContainer;
         private readonly IContainer _SQLserverContainer;
         private readonly IContainer _rabbitmqContainer;
-
-
-        static void CreateClient()
-        {
-
-        }
 
         public WebApplicationFactoryFixture()
         {
@@ -197,8 +184,6 @@ namespace Integration.EndToEnd.Fixtures
 
      
         }
-
-
 
         public async Task DisposeAsync()
         {
