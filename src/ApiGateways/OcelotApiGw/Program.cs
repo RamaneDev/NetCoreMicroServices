@@ -17,7 +17,7 @@ namespace OcelotApiGw
 
             builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
             {
-                config.AddJsonFile($"ocelot.Local.json", true, true);
+                config.AddJsonFile($"ocelot.{hostingContext.HostingEnvironment.EnvironmentName}.json", true, true);
             })
             .ConfigureLogging((hostingContext, loggingbuilder) =>
             {
@@ -29,7 +29,7 @@ namespace OcelotApiGw
             builder.Services.AddOcelot()
                    .AddCacheManager(settings => settings.WithDictionaryHandle());
 
-            var app = builder.Build();           
+            var app = builder.Build();
 
             app.MapGet("/", () => "Hello World!");
 
