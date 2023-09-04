@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 using Microsoft.Extensions.Configuration;
 using Basket_API.Entities;
+using Ordering_Application.Features.Orders.Queries.GetOrdersList;
 
 namespace Integration.EndToEnd.Fixtures
 {
@@ -26,6 +27,7 @@ namespace Integration.EndToEnd.Fixtures
         private readonly RESTFulApiFactoryClient _apiFactoryClient;
         private const string catalogUrl = "/Catalog";
         private const string basketUrl = "/Basket";
+        private const string orderUrl = "/Order";
 
         // apis containers
         private readonly IContainer _catalogapiContainer;
@@ -165,6 +167,12 @@ namespace Integration.EndToEnd.Fixtures
 
         public async ValueTask<ShoppingCart> GetBasketAsync(string username) =>
           await this._apiFactoryClient.GetContentAsync<ShoppingCart>($"{basketUrl}/{username}");
+
+        public async ValueTask CheckoutBasketAsync(BasketCheckout basketCheckout) =>
+          await this._apiFactoryClient.PostContentAsync<BasketCheckout>($"{basketUrl}/Checkout", basketCheckout);
+
+        public async ValueTask<IEnumerable<OrderDto>> GetOrderAsync(string username) =>
+          await this._apiFactoryClient.GetContentAsync<IEnumerable<OrderDto>>($"{orderUrl}/{username}");
 
 
         public async Task InitializeAsync()
